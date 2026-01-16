@@ -120,7 +120,8 @@ body{
 }
 
 @layer base {
-  * {
+  /* * { remove global selector as it affect responsive utilities*/
+  html, body {
     @apply border-border outline-ring/50;
   }
   body {
