@@ -8,7 +8,7 @@ function Header() {
         {/* Search Bar */}
         <div className='flex gap-2 border border-border p-2 rounded-md'>
             <Search className='h-5 w-5'/>
-            <input type='text' placeholder='Search...' className='outline-none'/>
+            <input type='text' placeholder='Search...' className='outline-none w-24 md:w-64'/>
         </div>
          {/* Get Started Button & bell icon*/}
         <div className='flex items-center gap-4'>
