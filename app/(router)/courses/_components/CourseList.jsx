@@ -42,8 +42,8 @@ function CourseList() {
       {/* Display Course List */}
       <div className='grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
         {courseList?.length>0? courseList.map((item, index)=>(
-          <Link href={'/course-preview/'+item.slug}>
-          <div key={index}>
+          <Link key={index} href={'/course-preview/'+item.slug}>
+          <div>
             <CourseItem course={item}/>
           </div>
           </Link>

@@ -4,20 +4,41 @@ import CourseVideoDescription from './_components/CourseVideoDescription';
 import GlobalApi from '@/app/_utils/GlobalApi';
 import CourseEnrollSection from './_components/CourseEnrollSection';
 import CourseContentSection from './_components/CourseContentSection';
+import { useUser } from '@clerk/nextjs';
 
 function CoursePreview({params}) {
+  const {user} = useUser();
   const [courseInfo, setCourseInfo] =useState();
+  const [isUserAlreadyEnrolled,setIsUserAlreadyEnrolled]=useState();
   const resolvedParams = use(params);
   useEffect(()=>{
     resolvedParams&&getCourseInfoById()
   },[resolvedParams])
 
+  useEffect(()=>{
+    courseInfo&&user&&checkUserEnrolledToCourse();
+  },[courseInfo,user])
   /**
    * used to get Course Info By Slug/Id Name
    */
   const getCourseInfoById=()=>{
     GlobalApi.getCourseById(resolvedParams?.courseId).then(resp=>{
       setCourseInfo(resp?.courseList);
+      
+    })
+  }
+
+  /**
+   * To check user already enrolled to course
+   */
+  const checkUserEnrolledToCourse=()=>{
+    GlobalApi.checkUserEnrolledToCourse(courseInfo.slug,user.primaryEmailAddress.emailAddress)
+    .then(resp=>{
+      if(resp?.userEnrollCourses){
+        console.log(resp);
+        setIsUserAlreadyEnrolled(resp?.userEnrollCourses[0]?.id);
+      }
+
     })
   }
 
@@ -31,9 +52,11 @@ function CoursePreview({params}) {
 
       {/* Course Content */}
       <div>
-        <CourseEnrollSection/>
+        <CourseEnrollSection courseInfo={courseInfo}
+          isUserAlreadyEnrolled={isUserAlreadyEnrolled}/>
 
-        <CourseContentSection courseInfo={courseInfo}/>
+        <CourseContentSection courseInfo={courseInfo}
+        isUserAlreadyEnrolled={isUserAlreadyEnrolled}/>
       </div>
 
     </div>
